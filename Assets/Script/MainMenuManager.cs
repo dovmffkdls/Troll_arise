@@ -25,20 +25,21 @@ public class MainMenuManager : MonoBehaviour
 
     void Buttion1InGame(string message)
     {
-        Debug.Log(message);
-        SceneManager.LoadScene("InGame");
+        // Debug.Log(message);
+        // SceneManager.LoadScene("InGame");
+        LoadingScenController.LoadScene("InGame");
     }
     void Button2LogInGoogle(string message)
     {
-        Debug.Log(message);
+        // Debug.Log(message);
     }
     void Button3Option(string message)
     {
-        Debug.Log(message);
+        // Debug.Log(message);
     }
     void Button9Quit(string message)
     {
-        Debug.Log(message);
+        // Debug.Log(message);
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
