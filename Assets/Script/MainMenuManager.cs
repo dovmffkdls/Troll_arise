@@ -5,10 +5,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
 
-    public Button buttion1InGame, button2LogIn, button3Option, button9Quit;
-    
-   
-
+    public Button button1, button2, button3, button8, button9;
 
     void Start()
     {
@@ -17,27 +14,33 @@ public class MainMenuManager : MonoBehaviour
 
     void Awake()
     {
-        buttion1InGame.onClick.AddListener(()=>Buttion1InGame("InGame"));
-        button2LogIn.onClick.AddListener(()=>Button2LogInGoogle("Login"));
-        button3Option.onClick.AddListener(() => Button3Option("Option"));
-        button9Quit.onClick.AddListener(() => Button9Quit("Quit"));
+        button1.onClick.AddListener(()=>Button1("InGame"));
+        button2.onClick.AddListener(()=>Button2("LoginGoogle"));
+        button3.onClick.AddListener(() => Button3("Option"));
+        button8.onClick.AddListener(() => Button8("Play Test"));
+        button9.onClick.AddListener(() => Button9("Quit"));
     }
 
-    void Buttion1InGame(string message)
+    void Button1(string message)
     {
         // Debug.Log(message);
         // SceneManager.LoadScene("InGame");
         LoadingScenController.LoadScene("InGame");
     }
-    void Button2LogInGoogle(string message)
+    void Button2(string message)
     {
         // Debug.Log(message);
     }
-    void Button3Option(string message)
+    void Button3(string message)
     {
         // Debug.Log(message);
     }
-    void Button9Quit(string message)
+    void Button8(string message)
+    {
+        // Debug.Log(message);
+        LoadingScenController.LoadScene("PlayTest");
+    }
+    void Button9(string message)
     {
         // Debug.Log(message);
 #if UNITY_EDITOR
