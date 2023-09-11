@@ -5,11 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - UI
+  - 11_PlayerUI
+  - 11_QuestPanel
+  - 13_MenuPanel
+  - 12_StageDataPanel
+  - 15_SlotPanel
+  - 14_OtherBtnPanel
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - BG
   - Water
   - UI
   - 
