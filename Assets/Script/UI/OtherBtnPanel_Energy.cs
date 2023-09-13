@@ -7,67 +7,80 @@ using UnityEngine.UI;
 public class OtherBtnPanel_Energy : MonoBehaviour
 {
     public Button savingModeButtonCall, savingModeButtonClose;
-
+    
     [SerializeField] 
     private GameObject energyUi, playUI, expSlider;
 
-    float SavingTime = 0f; // 세이빙 모드 타임 초기화
-    public bool SavingTimerOn; // 세이빙 모드 타이머 돌지/말지 판정
-    string sthours = "";
-    string stminutes = "";
-    string stseconds = "";
+    float savingTime = 0f; // 세이빙 모드 타임 초기화
+    public bool savingTimerOn; // 세이빙 모드 타이머 돌지/말지 판정
+    string sthours = "", stminutes = "", stseconds = "";
 
-    public Text textTimer; // 세이빙 모드 ui 지정
+    public Slider closeSlider;
+    private float toBlackTime = 10f; // 검은 화면으로 가는 시간 설정
+
+    public Text textTimer; // 세이빙 모드 타이머 
+
+
+    [SerializeField] // 완전 검은 화면 ==> 세이빙모드로 전환
+    public Button savingBlack;
 
     void Start()
     {
         savingModeButtonCall.onClick.AddListener(CallEnergy);
-        savingModeButtonClose.onClick.AddListener(CloseEnergy);
-
-    }
-
-    private void Update()
-    {
-        if (SavingTimerOn)
-        {
-            SavingTime += Time.deltaTime;
-            sthours = Mathf.Floor(SavingTime / 3600).ToString();
-            stminutes = Mathf.RoundToInt(SavingTime / 60 % 60).ToString();
-            stseconds = Mathf.RoundToInt(SavingTime % 60).ToString();
-            
-            textTimer.text = sthours + " : " + stminutes + " : " + stseconds;
-        }
+        closeSlider.onValueChanged.AddListener(CloseEnergy);
     }
     private void CallEnergy()
     {
         GameManager.isEnergy = true;
         energyUi.SetActive(true);
-        SavingTimerOn = true;
-
-        energyUi.transform.SetSiblingIndex(120);
-        int IndexNumber = energyUi.transform.GetSiblingIndex();
-
-        // Debug.Log("energyUi = " + energyUi.transform.GetSiblingIndex());
-
-        playUI.transform.SetSiblingIndex(IndexNumber);
-        // Debug.Log("playUI = " + playUI.transform.GetSiblingIndex());
-
-        expSlider.transform.SetSiblingIndex(IndexNumber);
-        // Debug.Log("expSlider = " + expSlider.transform.GetSiblingIndex());
-
+        savingTimerOn = true;
+        closeSlider.value = 0;
+        
         OnDemandRendering.renderFrameInterval = 12;
 
+        StartCoroutine(CoBlackOn());
     }
-
-    private void CloseEnergy()
+    private IEnumerator CoBlackOn() // 몇 초후 검은 화면 덮기
     {
-        GameManager.isEnergy = false;
-        energyUi.SetActive(false);
-        SavingTimerOn = false;
-        SavingTime = 0f;
-
-        OnDemandRendering.renderFrameInterval = 1;
+        yield return new WaitForSeconds(toBlackTime);
+        BlackOn();
     }
 
-}
+    private void BlackOn()
+    {
+        savingBlack.gameObject.SetActive(true);
+        savingBlack.onClick.AddListener(BlackOff);
+    }
+    private void BlackOff() // 완전 검은 화면 걷어내기
+    {
+        savingBlack.gameObject.SetActive(false);
 
+//        OnDisplay_UI_member();
+        StartCoroutine(CoBlackOn());
+    }
+    private void Update()
+    {
+        if (savingTimerOn)
+        {
+            savingTime += Time.deltaTime;
+            sthours = Mathf.Floor(savingTime / 3600).ToString("00");
+            stminutes = Mathf.RoundToInt(savingTime / 60 % 60).ToString("00");
+            stseconds = Mathf.RoundToInt(savingTime % 60).ToString("00");
+            
+            textTimer.text = sthours + " : " + stminutes + " : " + stseconds;
+        }
+    }
+
+    private void CloseEnergy(float _value)
+    {
+        if(_value == 1)
+        {
+            energyUi.SetActive(false);
+            
+            savingTimerOn = false;
+            savingTime = 0f;
+
+            OnDemandRendering.renderFrameInterval = 1;
+        }
+    }
+}
